@@ -140,8 +140,13 @@ class UnitSwitcher(ctk.CTkLabel):
         self.metric_bool = metric_bool
         self.bind('<Button>', self.change_units)
     
-    def change_inits(self):
-        pass
+    def change_units(self, event):
+        self.metric_bool.set(not self.metric_bool.get())
+        
+        if self.metric_bool.get():
+            self.configure(text = 'metric')
+        else:
+            self.configure(text = 'imperial')
   
 if __name__ == '__main__':
     App()

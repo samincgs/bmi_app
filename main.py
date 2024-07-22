@@ -34,7 +34,7 @@ class App(ctk.CTk):
         #widgets
         MainText(self, self.bmi_string)
         WeightInput(self, self.weight_float)
-        HeightInput(self, self.height_int)
+        HeightInput(self, self.height_int, self.metric_bool)
         UnitSwitcher(self, self.metric_bool)
         
         self.mainloop()
@@ -109,9 +109,10 @@ class WeightInput(ctk.CTkFrame):
         self.weight_string.set(f'{round(self.weight_float.get(), 1)} kg')
 
 class HeightInput(ctk.CTkFrame):
-    def __init__(self, parent, height_int):
+    def __init__(self, parent, height_int, metric_bool):
         super().__init__(master = parent, fg_color=WHITE)
         self.grid(column = 0, row = 3, sticky='nsew', padx = FRAME_PADDING, pady = FRAME_PADDING)
+        self.metric_bool = metric_bool
         
         # widgets
         slider = ctk.CTkSlider(master = self, command=self.update_text,button_color=GREEN, button_hover_color=DARK_GREEN, progress_color=GREEN, fg_color=GRAY, variable=height_int, from_=100, to=250)
@@ -126,10 +127,15 @@ class HeightInput(ctk.CTkFrame):
         output_text.pack(side='left', padx = 20)
         
     def update_text(self, amount):
-        text_string = str(int(amount))
-        meter = text_string[0]
-        cm = text_string[1:]
-        self.output_string.set(f'{meter}.{cm}m')
+        if self.metric_bool.get():
+            text_string = str(int(amount))
+            meter = text_string[0]
+            cm = text_string[1:]
+            self.output_string.set(f'{meter}.{cm}m')
+        else:
+            feet, inches = divmod(amount / 2.54, 12)
+            print(feet)
+            print(inches)
 
 class UnitSwitcher(ctk.CTkLabel):
     def __init__(self, parent, metric_bool):

@@ -74,10 +74,14 @@ class WeightInput(ctk.CTkFrame):
         self.columnconfigure(3, weight= 1, uniform='b')
         self.columnconfigure(4, weight= 2, uniform='b')
         
+        # data
+        self.weight_string = ctk.StringVar()
+        self.update_weight()
+        
         # widgets
         #text
         font = ctk.CTkFont(family=FONT, size=INPUT_FONT_SIZE)
-        label = ctk.CTkLabel(master = self, text='70kg', text_color=BLACK, font=font)
+        label = ctk.CTkLabel(master = self, text_color=BLACK, font=font, textvariable=self.weight_string)
         label.grid(row = 0, column = 2)
         
         #buttons
@@ -92,13 +96,16 @@ class WeightInput(ctk.CTkFrame):
         
         small_plus_button = ctk.CTkButton(master = self, command= lambda: self.update_weight(('plus', 'small')), text='+', font=font, text_color=BLACK, fg_color=LIGHT_GRAY, hover_color=GRAY, corner_radius=BUTTON_CORNER_RADIUS)
         small_plus_button.grid(row = 0, column = 3, padx = SMALL_BUTTON_PADDING, pady = SMALL_BUTTON_PADDING)
-        
+       
     def update_weight(self, info = None):
-        amount = 1 if info[1] == 'large' else 0.1
-        if info[0] == 'plus':
-            self.weight_float.set(self.weight_float.get() + amount)
-        else:
-            self.weight_float.set(self.weight_float.get() - amount)
+        if info:
+            amount = 1 if info[1] == 'large' else 0.1
+            if info[0] == 'plus':
+                self.weight_float.set(self.weight_float.get() + amount)
+            else:
+                self.weight_float.set(self.weight_float.get() - amount)
+            
+        self.weight_string.set(f'{round(self.weight_float.get(), 1)} kg')
 
 class HeightInput(ctk.CTkFrame):
     def __init__(self, parent, height_int):
@@ -114,7 +121,7 @@ class HeightInput(ctk.CTkFrame):
         self.update_text(height_int.get())
         
         font = ctk.CTkFont(FONT, INPUT_FONT_SIZE)
-        output_text = ctk.CTkLabel(master = self, text='1.80m', text_color=BLACK, font=font, textvariable=self.output_string)
+        output_text = ctk.CTkLabel(master = self,text_color=BLACK, font=font, textvariable=self.output_string)
         output_text.pack(side='left', padx = 20)
         
     def update_text(self, amount):

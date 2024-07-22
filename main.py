@@ -21,6 +21,7 @@ class App(ctk.CTk):
         self.rowconfigure((0,1,2,3), weight=1, uniform='a')
         
         # data
+        self.metric_bool = ctk.BooleanVar(value = True)
         self.height_int = ctk.IntVar(value=170)
         self.weight_float = ctk.DoubleVar(value= 65)
         self.bmi_string = ctk.StringVar()
@@ -34,7 +35,7 @@ class App(ctk.CTk):
         MainText(self, self.bmi_string)
         WeightInput(self, self.weight_float)
         HeightInput(self, self.height_int)
-        UnitSwitcher(self)
+        UnitSwitcher(self, self.metric_bool)
         
         self.mainloop()
     
@@ -131,10 +132,16 @@ class HeightInput(ctk.CTkFrame):
         self.output_string.set(f'{meter}.{cm}m')
 
 class UnitSwitcher(ctk.CTkLabel):
-    def __init__(self, parent):
+    def __init__(self, parent, metric_bool):
         font = ctk.CTkFont(family= FONT, size=SWITCH_FONT_SIZE, weight='bold')
         super().__init__(master=parent, text='metric', text_color=DARK_GREEN, font=font)
         self.place(relx = 0.98, rely = 0.01, anchor='ne')
+        
+        self.metric_bool = metric_bool
+        self.bind('<Button>', self.change_units)
+    
+    def change_inits(self):
+        pass
   
 if __name__ == '__main__':
     App()

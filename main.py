@@ -12,7 +12,7 @@ class App(ctk.CTk):
         super().__init__(fg_color=GREEN)
         self.title('BMI app')
         self.iconbitmap('empty.ico')
-        self.geometry('400x400')
+        self.geometry('500x500')
         self.resizable(False, False)
         self.change_title_bar_color()
         
@@ -28,16 +28,20 @@ class App(ctk.CTk):
         self.update_bmi()
         
         # tracing
-        self.height_int.trace('w', self.update_bmi)
-        self.weight_float.trace('w', self.update_bmi)
+        self.height_int.trace_add('write', self.update_bmi)
+        self.weight_float.trace_add('write', self.update_bmi)
+        self.metric_bool.trace_add('write', self.change_units)
         
         #widgets
         MainText(self, self.bmi_string)
-        WeightInput(self, self.weight_float)
-        HeightInput(self, self.height_int, self.metric_bool)
+        WeightInput(self, self.weight_float, self.metric_bool)
+        self.height_input = HeightInput(self, self.height_int, self.metric_bool)
         UnitSwitcher(self, self.metric_bool)
         
         self.mainloop()
+    
+    def change_units(self, *args):
+        self.height_input.update_text(self.height_int.get())
     
     def update_bmi(self, *args):
         height_meter = self.height_int.get() / 100
@@ -62,10 +66,11 @@ class MainText(ctk.CTkLabel):
         self.grid(column = 0, row = 0, rowspan = 2, sticky='nsew' )
 
 class WeightInput(ctk.CTkFrame):
-    def __init__(self, parent, weight_float):
+    def __init__(self, parent, weight_float, metric_bool):
         super().__init__(master=parent, fg_color=WHITE)
         self.grid(column = 0, row = 2, sticky ='nsew', padx = FRAME_PADDING, pady = FRAME_PADDING)
         self.weight_float = weight_float
+        self.metric_bool = metric_bool
         
         # layout
         self.rowconfigure(0, weight= 1)
@@ -132,10 +137,10 @@ class HeightInput(ctk.CTkFrame):
             meter = text_string[0]
             cm = text_string[1:]
             self.output_string.set(f'{meter}.{cm}m')
-        else:
-            feet, inches = divmod(amount / 2.54, 12)
-            print(feet)
-            print(inches)
+        else: 
+            inches = amount / 2.54 # cm -> inches = cm / 2.54
+            feet = inches / 12 # inches -> feet = feet / 12
+            self.output_string.set(f'{round(feet, 1)}ft')
 
 class UnitSwitcher(ctk.CTkLabel):
     def __init__(self, parent, metric_bool):

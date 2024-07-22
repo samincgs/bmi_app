@@ -46,6 +46,33 @@ class WeightInput(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(master=parent, fg_color=WHITE)
         self.grid(column = 0, row = 2, sticky ='nsew', padx = 10, pady = 10)
+        
+        # layout
+        self.rowconfigure(0, weight= 1)
+        self.columnconfigure(0, weight= 2, uniform='b')
+        self.columnconfigure(1, weight= 1, uniform='b')
+        self.columnconfigure(2, weight= 3, uniform='b')
+        self.columnconfigure(3, weight= 1, uniform='b')
+        self.columnconfigure(4, weight= 2, uniform='b')
+        
+        # widgets
+        #text
+        font = ctk.CTkFont(family=FONT, size=INPUT_FONT_SIZE)
+        label = ctk.CTkLabel(master = self, text='70kg', text_color=BLACK, font=font)
+        label.grid(row = 0, column = 2)
+        
+        #buttons
+        minus_button = ctk.CTkButton(master = self, text='-', font=font, text_color=BLACK, fg_color=LIGHT_GRAY, hover_color=GRAY, corner_radius=BUTTON_CORNER_RADIUS)
+        minus_button.grid(row = 0, column = 0, sticky = 'ns', padx = BIG_BUTTON_PADDING, pady = BIG_BUTTON_PADDING)
+        
+        small_minus_button = ctk.CTkButton(master = self, text='-', font=font, text_color=BLACK, fg_color=LIGHT_GRAY, hover_color=GRAY, corner_radius=BUTTON_CORNER_RADIUS)
+        small_minus_button.grid(row = 0, column = 1, padx = SMALL_BUTTON_PADDING, pady = SMALL_BUTTON_PADDING)
+        
+        plus_button = ctk.CTkButton(master = self, text='+', font=font, text_color=BLACK, fg_color=LIGHT_GRAY, hover_color=GRAY, corner_radius=BUTTON_CORNER_RADIUS)
+        plus_button.grid(row = 0, column = 4, sticky = 'ns', padx = BIG_BUTTON_PADDING, pady = BIG_BUTTON_PADDING)
+        
+        small_plus_button = ctk.CTkButton(master = self, text='+', font=font, text_color=BLACK, fg_color=LIGHT_GRAY, hover_color=GRAY, corner_radius=BUTTON_CORNER_RADIUS)
+        small_plus_button.grid(row = 0, column = 3, padx = SMALL_BUTTON_PADDING, pady = SMALL_BUTTON_PADDING)
       
 if __name__ == '__main__':
     App()
